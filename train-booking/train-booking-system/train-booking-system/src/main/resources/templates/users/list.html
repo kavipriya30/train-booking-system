@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>🚆 User Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: url('https://unece.org/sites/default/files/styles/crop_thumbnail/public/2023-11/Railway%20cargo_S.jpg?itok=B0TGPraT')
+                  no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: -1;
+    }
+
+    header {
+      text-align: center;
+      font-size: 36px;
+      padding: 25px;
+      color: #f5d76e;
+      letter-spacing: 1.2px;
+      text-shadow: 0 0 12px rgba(0,0,0,0.5);
+    }
+
+    .container {
+      width: 85%;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+
+    .add-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #d4af37, #b8860b);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 223, 128, 0.6);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(212, 175, 55, 0.25);
+      color: #f8e58c;
+      font-size: 18px;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 16px;
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.15);
+      transition: 0.3s;
+    }
+
+    .action a {
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      margin-right: 6px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .edit-btn {
+      background: linear-gradient(135deg, #6c5ce7, #8e44ad);
+      color: white;
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #c0392b, #8e1e10);
+      color: white;
+    }
+
+    .edit-btn:hover, .delete-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>🚆 User Management Portal</header>
+
+  <div class="container">
+    <!-- ✅ Add New User Button -->
+    <a th:href="@{/users/new}" class="add-btn">➕ Add New User</a>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="user : ${users}">
+          <td th:text="${user.id}"></td>
+          <td th:text="${user.name}"></td>
+          <td th:text="${user.email}"></td>
+          <td class="action">
+            <a th:href="@{/users/edit/{id}(id=${user.id})}" class="edit-btn">✏ Edit</a>
+            <a th:href="@{/users/delete/{id}(id=${user.id})}" class="delete-btn">🗑 Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

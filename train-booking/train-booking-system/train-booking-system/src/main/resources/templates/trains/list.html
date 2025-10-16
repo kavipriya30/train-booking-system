@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>🚆 Train Management</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    /* ---------- Background ---------- */
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: url('https://unece.org/sites/default/files/styles/crop_thumbnail/public/2023-11/Railway%20cargo_S.jpg?itok=B0TGPraT')
+                  no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: -1;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      text-align: center;
+      font-size: 36px;
+      padding: 25px;
+      color: #f5d76e;
+      letter-spacing: 1.2px;
+      text-shadow: 0 0 12px rgba(0,0,0,0.5);
+      animation: fadeDown 1s ease-out;
+    }
+
+    /* ---------- Container ---------- */
+    .container {
+      width: 90%;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+      animation: fadeUp 1s ease-out;
+    }
+
+    /* ---------- Add Button ---------- */
+    .add-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #d4af37, #b8860b);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 223, 128, 0.6);
+    }
+
+    /* ---------- Table ---------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(212, 175, 55, 0.25);
+      color: #f8e58c;
+      font-size: 18px;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 16px;
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.15);
+      transition: 0.3s;
+    }
+
+    /* ---------- Action Buttons ---------- */
+    .action a {
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      margin-right: 6px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .edit-btn {
+      background: linear-gradient(135deg, #6c5ce7, #8e44ad);
+      color: white;
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #c0392b, #8e1e10);
+      color: white;
+    }
+
+    .edit-btn:hover, .delete-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    /* ---------- Modal ---------- */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal.show {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      color: #fff;
+      width: 340px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    }
+
+    .modal h3 {
+      color: #f5d76e;
+      margin-bottom: 10px;
+    }
+
+    .modal button {
+      margin: 10px 8px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .confirm {
+      background: linear-gradient(135deg, #c0392b, #8e1e10);
+      color: #fff;
+    }
+
+    .cancel {
+      background: rgba(255,255,255,0.15);
+      color: #f5d76e;
+    }
+
+    .confirm:hover, .cancel:hover {
+      transform: scale(1.05);
+    }
+
+    /* ---------- Animations ---------- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>🚆 Train Management Portal</header>
+
+  <div class="container">
+    <a href="/trains/new" class="add-btn">➕ Add New Train</a>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Train ID</th>
+          <th>Name</th>
+          <th>Source</th>
+          <th>Destination</th>
+          <th>Base Price</th>
+          <th>Discount %</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="train : ${trains}">
+          <td th:text="${train.id}"></td>
+          <td th:text="${train.name}"></td>
+          <td th:text="${train.source}"></td>
+          <td th:text="${train.destination}"></td>
+          <td th:text="${train.basePrice}"></td>
+          <td th:text="${train.discountPercentage}"></td>
+          <td class="action">
+            <a th:href="@{/trains/edit/{id}(id=${train.id})}" class="edit-btn">✏ Edit</a>
+            <a href="javascript:void(0);" th:attr="data-id=${train.id}" class="delete-btn" onclick="openModal(this)">🗑 Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <h3>Confirm Deletion</h3>
+      <p>Are you sure you want to delete this train?</p>
+      <button id="confirmDelete" class="confirm">Yes, Delete</button>
+      <button class="cancel" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    let deleteId = null;
+
+    function openModal(el) {
+      deleteId = el.getAttribute("data-id");
+      document.getElementById("deleteModal").classList.add("show");
+    }
+
+    function closeModal() {
+      document.getElementById("deleteModal").classList.remove("show");
+    }
+
+    document.getElementById("confirmDelete").addEventListener("click", function() {
+      if (deleteId) {
+        window.location.href = "/trains/delete/" + deleteId;
+      }
+    });
+  </script>
+</body>
+</html>

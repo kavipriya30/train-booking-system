@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>🚆 User Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: url('https://unece.org/sites/default/files/styles/crop_thumbnail/public/2023-11/Railway%20cargo_S.jpg?itok=B0TGPraT')
+                  no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      overflow-x: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: -1;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px);
+      padding: 50px 60px;
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      width: 380px;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: #ffd700;
+      margin-bottom: 25px;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    }
+
+    label {
+      display: block;
+      margin: 15px 0;
+      font-size: 16px;
+      color: #f8f8f8;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 10px #ffd700;
+    }
+
+    button {
+      margin-top: 25px;
+      background: linear-gradient(45deg, #d4af37, #f6d365);
+      color: #222;
+      font-weight: bold;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(45deg, #fdd835, #f6d365);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+
+    <!-- Create User Form -->
+    <form th:if="${user.id == null}" th:action="@{/users}" th:object="${user}" method="post">
+      <h1>Create User</h1>
+      <label>Name:
+        <input type="text" th:field="*{name}" placeholder="Enter name" required/>
+      </label>
+      <label>Email:
+        <input type="email" th:field="*{email}" placeholder="Enter email" required/>
+      </label>
+      <button type="submit">Save</button>
+    </form>
+
+    <!-- Edit User Form -->
+    <form th:if="${user.id != null}" th:action="@{/users/update/{id}(id=${user.id})}" th:object="${user}" method="post">
+      <h1>Edit User</h1>
+      <label>Name:
+        <input type="text" th:field="*{name}" placeholder="Enter name" required/>
+      </label>
+      <label>Email:
+        <input type="email" th:field="*{email}" placeholder="Enter email" required/>
+      </label>
+      <button type="submit">Save</button>
+    </form>
+
+  </div>
+</body>
+</html>
